@@ -1,3 +1,4 @@
+'use client'
 import {Loader} from '@googlemaps/js-api-loader'
 import { useEffect } from 'react'
 
@@ -13,11 +14,13 @@ export default function NewRoutePage() {
       loader.importLibrary('routes'),
       loader.importLibrary('geometry'),
     ]).then(() => {
-      
+      new google.maps.Map(document.getElementById('map') as HTMLElement,{
+        zoom: 15,
+      } )
     })
   }, [])
   return (
-    <div className="flex h-full ">
+    <main className="flex h-full ">
       <div>
         <h1>Nova rota</h1>
         <form className="flex flex-col">
@@ -31,6 +34,6 @@ export default function NewRoutePage() {
       <div id="map" className="h-full w-full">
         Mapa
       </div>
-    </div>
+    </main>
   )
 }
