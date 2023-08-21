@@ -9,7 +9,7 @@ export function useMap(containerRef: React.RefObject<HTMLDivElement>) {
   useEffect(() => {
     (async () => {
       const loader = new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string,
+        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
         libraries: ["routes", "geometry"],
       });
       const [, , position] = await Promise.all([
