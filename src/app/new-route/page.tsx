@@ -1,5 +1,5 @@
 'use client'
-import { FormEvent, useRef } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import { useMap } from '../hooks/useMap'
 import type {
   DirectionsResponseData,
@@ -9,15 +9,16 @@ import type {
 export default function NewRoutePage() {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const map = useMap(mapContainerRef)
+  const [directionsData, setDirectionsData] = useState<
+    DirectionsResponseData & { request: any }
+  >()
 
-  async function searchPlaces(event: FormEvent) {
+  async function handleSearchPlaces(event: FormEvent) {
     event.preventDefault()
-    const source = document.querySelector<HTMLInputElement>(
-      'input[name=source_placer'
-    )
-    const destination = document.querySelector<HTMLInputElement>(
-      'input[name=destination_placer'
-    )
+    const source = document.querySelector<HTMLInputElement>('#source')?.value
+    const destination =
+      document.querySelector<HTMLInputElement>('#destination')?.value
+
     const [sourceResponse, destinationResponse] = await Promise.all([
       fetch(`http://localhost:3000/places?text=${source}`),
       fetch(`http://localhost:3000/places?text=${destination}`)
@@ -45,34 +46,56 @@ export default function NewRoutePage() {
     )
     const directionsResponseData: DirectionsResponseData & { request: any } =
       await directionsResponse.json()
-
+    setDirectionsData(directionsResponseData)
+    map?.removeAllRoutes()
     map?.addRouteWithIcons({
       routeId: '1',
-      startMarkerOptions:{
-        position: directionsResponseData.routes[0]!.legs[0]!.start_location,
+      startMarkerOptions: {
+        position: directionsResponseData.routes[0]!.legs[0]!.start_location
       },
-      endMarkerOptions:{
-        position: directionsResponseData.routes[0]!.legs[0]!.end_location,
+      endMarkerOptions: {
+        position: directionsResponseData.routes[0]!.legs[0]!.end_location
       },
-      carMarkerOptions:{
-        position: directionsResponseData.routes[0]!.legs[0]!.start_location,
+      carMarkerOptions: {
+        position: directionsResponseData.routes[0]!.legs[0]!.start_location
       },
       directionsResponseData
     })
+  }
+
+  async function handleCreateRoute() {
+    const startAddress = directionsData!.routes[0].legs[0].start_address
+    const enAddress = directionsData!.routes[0].legs[0].end_address
+
+    const response = await fetch('http://localhost:3000/routes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: `${startAddress} - ${enAddress}`,
+        source_id: directionsData!.request.origin.place_id,
+        destination_id: directionsData!.request.destination.place_id
+      })
+    })
+
+    const route = await response.json()
   }
 
   return (
     <main className="flex h-full ">
       <div>
         <h1>Nova rota</h1>
-        <form className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleSearchPlaces}>
           <input
+            className="text-zinc-800"
             type="text"
             name="source_placer"
             placeholder="origem"
             id="source"
           />
           <input
+            className="text-zinc-800"
             type="text"
             name="destination_placer"
             placeholder="destino"
@@ -81,6 +104,15 @@ export default function NewRoutePage() {
 
           <button type="submit">Pesquisar</button>
         </form>
+        {directionsData && (
+          <ul>
+            <li>Origem {directionsData.routes[0].legs[0].start_address}</li>
+            <li>Destiono {directionsData.routes[0].legs[0].end_address}</li>
+            <li>
+              <button onClick={handleCreateRoute}>criar rota</button>
+            </li>
+          </ul>
+        )}
       </div>
       <div id="map" className="h-full w-full" ref={mapContainerRef}></div>
     </main>
