@@ -7,5 +7,8 @@ services:
       - 3001:3000
     volumes:
       - .:/home/node/app
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+      # - "host.docker.internal:172.17.0.1" # docker0 interface IP
 
 

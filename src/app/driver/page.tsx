@@ -17,13 +17,13 @@ export default function DriverPAge() {
     data: routes,
     error,
     isLoading
-  } = useSwr<Route[]>('http://localhost:3000/routes', fetcher, {
+  } = useSwr<Route[]>('http://localhost:3001/api/routes', fetcher, {
     fallback: []
   })
 
   async function handleStartRoute() {
     const routeId = document.querySelector<HTMLSelectElement>('#route')!.value
-    const response = await fetch(`http://localhost:3000/routes/${routeId}`)
+    const response = await fetch(`http://localhost:3001/api/routes/${routeId}`)
     const route = await response.json()
 
     map?.removeAllRoutes()
@@ -44,7 +44,7 @@ export default function DriverPAge() {
     for (const step of steps) {
       await sleep(2000)
       map?.moveCar(routeId, step.start_location)
-      socket.emit('new-point',{
+      socket.emit('new-points',{
         route_id: routeId,
         lat: step.start_location.lat,
         lng: step.start_location.lng
@@ -52,7 +52,7 @@ export default function DriverPAge() {
 
       await sleep(2000)
       map?.moveCar(routeId, step.end_location)
-      socket.emit('new-point',{
+      socket.emit('new-points',{
         route_id: routeId,
         lat: step.end_location.lat,
         lng: step.end_location.lng

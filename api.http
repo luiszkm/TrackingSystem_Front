@@ -1,0 +1,5 @@
+GET http://localhost:3001/api/places
+
+#####
+
+GET http://host.docker.internal:3000/routes

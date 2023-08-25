@@ -20,8 +20,8 @@ export default function NewRoutePage() {
       document.querySelector<HTMLInputElement>('#destination')?.value
 
     const [sourceResponse, destinationResponse] = await Promise.all([
-      fetch(`http://localhost:3000/places?text=${source}`),
-      fetch(`http://localhost:3000/places?text=${destination}`)
+      fetch(`http://localhost:3001/api/places?text=${source}`),
+      fetch(`http://localhost:3001/api/places?text=${destination}`)
     ])
 
     const [sourcePlace, destinationPlace]: FindPlaceFromTextResponseData[] =
@@ -42,7 +42,7 @@ export default function NewRoutePage() {
       destinationId: destinationPlace.candidates[0].place_id as string
     })
     const directionsResponse = await fetch(
-      `http://localhost:3000/directions?${queryParams.toString()}`
+      `http://localhost:3001/api/directions?${queryParams.toString()}`
     )
     const directionsResponseData: DirectionsResponseData & { request: any } =
       await directionsResponse.json()
@@ -67,7 +67,7 @@ export default function NewRoutePage() {
     const startAddress = directionsData!.routes[0].legs[0].start_address
     const enAddress = directionsData!.routes[0].legs[0].end_address
 
-    const response = await fetch('http://localhost:3000/routes', {
+    const response = await fetch('http://localhost:3001/api/routes', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

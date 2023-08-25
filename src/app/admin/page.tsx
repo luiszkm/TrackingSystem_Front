@@ -11,12 +11,12 @@ export default function AdminPage() {
   useEffect(() => {
     socket.connect()
     socket.on(
-      'new-point',
+      'admin-new-points',
       async (data: { route_id: string; lat: number; lng: number }) => {
         const hasRoute = map?.hasRoute(data.route_id)
         if (!hasRoute) {
           const response = await fetch(
-            `http://localhost:3000/routes/${data.route_id}`
+            `http://localhost:3001/api/routes/${data.route_id}`
           )
           const route: Route = await response.json()
           map?.removeRoute(data.route_id)
