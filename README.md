@@ -1,34 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Front end TrackingSystem
+#### Gerenciamento de rotas
 
-First, run the development server:
+## Funcionalidades
 
+- Cadastro e gerenciamento de rotas.
+- Integração com a API do Google Maps para renderizar o mapa e o trajeto.
+- Listagem de rotas disponíveis para motoristas.
+- Acompanhamento das rotas pelos administradores.
+
+## Pré-requisitos
+- key Google maps :[docs](https://console.cloud.google.com/apis/library/maps-backend.googleapis.com?project=dulcet-fuze-396315)
+
+- Docker: [Instalação](https://docs.docker.com/get-docker/)
+- Docker Compose: [Instalação](https://docs.docker.com/compose/install/)
+
+## Instalação
+
+1. Clone este repositório:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+git clone https://github.com/luiszkm/TrackingSystem_Front.git
+cd TrackingSystem_Server
 ```
+2. Configure as variáveis de ambiente:
+Renomeie o arquivo .env.example para .env e preencha as variáveis de acordo com as suas configurações.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Execute o comando:
+```bash
+docker compose up
+```
+## Projetos que consomem essa aplição
+- Microserviço Golang :[Github](https://github.com/luiszkm/microservices_GO)
+- Front-end Next: [Github](https://github.com/luiszkm/TrackingSystem_Server)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

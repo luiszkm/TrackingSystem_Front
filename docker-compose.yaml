@@ -4,9 +4,10 @@ services:
   app:
     build: .
     ports:
-      - 3001:3000
+      - 3000:3000
     volumes:
       - .:/home/node/app
+    command: sh -c "npm install && npm run dev"
     extra_hosts:
         - "host.docker.internal:host-gateway"
       # - "host.docker.internal:172.17.0.1" # docker0 interface IP

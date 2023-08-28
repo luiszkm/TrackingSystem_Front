@@ -6,6 +6,8 @@ import useSwr from 'swr'
 import { fetcher } from '../utils/http'
 import { Route } from '../utils/model'
 import { socket } from '../utils/socket-io'
+import { Button } from '../components/Button'
+import { Select } from '../components/Selecet'
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -17,13 +19,13 @@ export default function DriverPAge() {
     data: routes,
     error,
     isLoading
-  } = useSwr<Route[]>('http://localhost:3001/api/routes', fetcher, {
+  } = useSwr<Route[]>(`${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes`, fetcher, {
     fallback: []
   })
 
   async function handleStartRoute() {
     const routeId = document.querySelector<HTMLSelectElement>('#route')!.value
-    const response = await fetch(`http://localhost:3001/api/routes/${routeId}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEXT_API_URL}/routes/${routeId}`);
     const route = await response.json()
 
     map?.removeAllRoutes()
@@ -68,22 +70,22 @@ export default function DriverPAge() {
   },[])
 
   return (
-    <main className="flex h-full ">
-      <div>
-        <h1>Minha Viagem</h1>
-        <div className="flex flex-col">
-          <select id="route">
+    <main className=" h-full flex   ">
+      <div className='min-w-[250px] md:min-w-[400px] p-4 space-y-2'>
+        <h1 className='font-bold text-2xl text-center'>Minha Viagem</h1>
+        <div className="flex flex-col gap-4">
+          <Select id="route" >
             {isLoading && <option>Carregando rotas...</option>}
             {routes?.map(route => (
               <option key={route.id} value={route.id}>
                 {route.name}
               </option>
             ))}
-          </select>
+          </Select>
 
-          <button type="submit" onClick={handleStartRoute}>
+          <Button type="submit" onClick={handleStartRoute}>
             iniciar a viagem
-          </button>
+          </Button>
         </div>
       </div>
       <div id="map" className="h-full w-full" ref={mapContainerRef}></div>

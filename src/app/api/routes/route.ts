@@ -3,9 +3,9 @@ import {  NextResponse } from "next/server";
 
 
 export async function GET() {
-  const response = await fetch(`http://host.docker.internal:3000/routes`, {
+  const response = await fetch(`${process.env.NEST_URL}/routes`, {
     next: {
-    //  revalidate: 60 ,// prod aumentar o cache
+      revalidate: 1 ,// prod aumentar o cache
       tags: ["routes"]
     }
   })
@@ -14,7 +14,7 @@ export async function GET() {
 
 
 export async function POST(reuest: Request) {
-  const response = await fetch(`http://host.docker.internal:3000/routes`, {
+  const response = await fetch(`${process.env.NEST_URL}/routes`, {
     method: 'POST',
     headers:{
       'Content-Type': 'application/json'

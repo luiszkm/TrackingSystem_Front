@@ -5,9 +5,9 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const originId = url.searchParams.get('originId')
   const destinationId = url.searchParams.get('destinationId')
-  const response = await fetch(`http://host.docker.internal:3000/directions?originId=${originId}&destinationID=${destinationId}`, {
+  const response = await fetch(`${process.env.NEST_URL}/directions?originId=${originId}&destinationId=${destinationId}`, {
     next: {
-      revalidate: 60 // prod aumentar o cache
+      revalidate: 1 // prod aumentar o cache
     }
   })
   return NextResponse.json(await response.json());
